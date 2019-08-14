@@ -1,3 +1,3 @@
 package models
 
-type Fields *[]string 
+type Fields []string
