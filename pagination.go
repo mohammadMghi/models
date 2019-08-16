@@ -1,5 +1,7 @@
 package models
 
+import "reflect"
+
 type PaginationInfo struct {
 	TotalCount uint64 `json:"total_count,omitempty"`
 	PageCount  uint64 `json:"page_count,omitempty"`
@@ -9,6 +11,7 @@ type PaginationInfo struct {
 }
 
 type PaginateResult struct {
-	Items      []IBaseModel   `json:"items,omitempty"`
-	Pagination PaginationInfo `json:"pagination,omitempty"`
+	ReflectItems reflect.Value  `json:"-"`
+	Items        interface{}  `json:"items,omitempty"`
+	Pagination   PaginationInfo `json:"pagination,omitempty"`
 }

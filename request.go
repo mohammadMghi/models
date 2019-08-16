@@ -17,7 +17,8 @@ type Request struct {
 	Sort    *[]SortItem
 	Page    *uint64
 	PerPage *uint64
-	Body *IBaseModel
+	Body    interface{}
+	Result  interface{}
 }
 
 func (request *Request) AddNewFilter(key string, value interface{}) {
