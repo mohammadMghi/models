@@ -19,7 +19,7 @@ type Request struct {
 	PerPage uint64
 	Body    interface{}
 
-	Model  interface{}
+	Model  IBaseModel
 	Models  interface{}
 }
 
