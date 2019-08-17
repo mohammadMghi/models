@@ -15,10 +15,12 @@ type Request struct {
 	Fields  *Fields
 	Filters *Filters
 	Sort    *[]SortItem
-	Page    *uint64
-	PerPage *uint64
+	Page    uint64
+	PerPage uint64
 	Body    interface{}
-	Result  interface{}
+
+	Model  interface{}
+	Models  interface{}
 }
 
 func (request *Request) AddNewFilter(key string, value interface{}) {
