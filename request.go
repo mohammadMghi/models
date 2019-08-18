@@ -17,7 +17,7 @@ type Request struct {
 	Sort    *[]SortItem
 	Page    uint64
 	PerPage uint64
-	Body    interface{}
+	Body    IBaseModel
 
 	Model  IBaseModel
 	Models  interface{}
