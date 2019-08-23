@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -12,7 +13,8 @@ type Error struct {
 }
 
 const (
-	NOT_FOUND = 404
+	NotFoundError     = 404
+	UnauthorizedError = 403
 )
 
 func (e Error) Error() string {
@@ -31,7 +33,9 @@ func GetError(status int, err ...error) error {
 		msg = err[0].Error()
 	} else {
 		switch status {
-		case NOT_FOUND:
+		case NotFoundError:
+			msg = "not found"
+		case UnauthorizedError:
 			msg = "not found"
 		default:
 			msg = fmt.Sprintf("invalid request, code %d", status)
@@ -41,4 +45,11 @@ func GetError(status int, err ...error) error {
 		Status:  status,
 		Message: msg,
 	}
+}
+
+func GetUnAuthorizedError(err ...error) error {
+	if err == nil || len(err) == 0 {
+		err = []error{errors.New("access denied to access this section")}
+	}
+	return GetError(UnauthorizedError, err...)
 }

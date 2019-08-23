@@ -20,7 +20,7 @@ type Request struct {
 	Body    IBaseModel
 
 	Model  IBaseModel
-	Models  interface{}
+	Models interface{}
 }
 
 func (request *Request) AddNewFilter(key string, value interface{}) {
