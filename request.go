@@ -21,6 +21,8 @@ type Request struct {
 
 	Model  IBaseModel
 	Models interface{}
+	// config tags from loading or not
+	Tags map[string]bool
 }
 
 func (request *Request) AddNewFilter(key string, value interface{}) {
