@@ -4,6 +4,7 @@ import "github.com/gin-gonic/gin"
 
 type IRequest interface {
 	AddNewFilter(key string, value interface{})
+	SetBody(body IBaseModel)
 	SetBaseRequest(req *Request)
 	GetBaseRequest() *Request
 }
@@ -30,10 +31,15 @@ type Request struct {
 func (request *Request) AddNewFilter(key string, value interface{}) {
 	(*request.Filters)[key] = value
 }
+
 func (request *Request) SetBaseRequest(req *Request) {
 	request.IRequest = req
 }
 
 func (request *Request) GetBaseRequest() *Request {
 	return request
+}
+
+func (request *Request) SetBody(body IBaseModel) {
+	request.Body = body
 }
