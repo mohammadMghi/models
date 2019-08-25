@@ -12,15 +12,16 @@ type IRequest interface {
 type Request struct {
 	IRequest
 
-	Context *gin.Context
-	Params  *gin.Params
-	ID      interface{}
-	Fields  *Fields
-	Filters *Filters
-	Sort    *[]SortItem
-	Page    uint64
-	PerPage uint64
-	Body    IBaseModel
+	Context    *gin.Context
+	Params     *gin.Params
+	ID         interface{}
+	Fields     *Fields
+	Filters    *Filters
+	Sort       *[]SortItem
+	Page       uint64
+	PerPage    uint64
+	Body       IBaseModel
+	ExtraQuery map[string]interface{}
 
 	Model  IBaseModel
 	Models interface{}
