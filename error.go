@@ -24,6 +24,14 @@ func (e Error) Error() string {
 	return e.Message
 }
 
+func getErrors(messages ...string) []error {
+	errs := []error{}
+	for _, message := range messages {
+		errs = append(errs, errors.New(message))
+	}
+	return errs
+}
+
 func HandleError(err error) error {
 	return Error{
 		Message: err.Error(),
@@ -32,6 +40,9 @@ func HandleError(err error) error {
 
 func GetError(status int, err ...error) error {
 	var msg string
+	if status == 0 {
+		status = 500
+	}
 	if err != nil && len(err) > 0 {
 		msg = err[0].Error()
 	} else {
@@ -50,31 +61,35 @@ func GetError(status int, err ...error) error {
 	}
 }
 
-func GetUnAuthorizedError(err ...error) error {
-	if err == nil || len(err) == 0 {
-		err = []error{errors.New("You are not authorized to access this section")}
+func GetUnAuthorizedError(messages ...string) error {
+	if messages == nil || len(messages) == 0 {
+		messages = []string{"You are not authorized to access this section"}
 	}
-	return GetError(UnauthorizedError, err...)
+	errs := getErrors(messages...)
+	return GetError(UnauthorizedError, errs...)
 }
 
-func GetForbiddenError(err ...error) error {
-	if err == nil || len(err) == 0 {
-		err = []error{errors.New("Access to this section is denied")}
+func GetForbiddenError(messages ...string) error {
+	if messages == nil || len(messages) == 0 {
+		messages = []string{"Access to this section is denied"}
 	}
-	return GetError(ForbiddenError, err...)
+	errs := getErrors(messages...)
+	return GetError(ForbiddenError, errs...)
 }
 
 // GetValidationError returns error associated with HTTP Vlidation error
-func GetValidationError(err ...error) error {
-	if err == nil || len(err) == 0 {
-		err = []error{errors.New("Your request is not valid")}
+func GetValidationError(messages ...string) error {
+	if messages == nil || len(messages) == 0 {
+		messages = []string{"Your request is not valid"}
 	}
-	return GetError(BadRequestError, err...)
+	errs := getErrors(messages...)
+	return GetError(BadRequestError, errs...)
 }
 
-func GetInternalServiceError(err ...error) error {
-	if err == nil || len(err) == 0 {
-		err = []error{errors.New("Unknown error")}
+func GetInternalServiceError(messages ...string) error {
+	if messages == nil || len(messages) == 0 {
+		messages = []string{"Unknown error"}
 	}
-	return GetError(InternalError, err...)
+	errs := getErrors(messages...)
+	return GetError(InternalError, errs...)
 }

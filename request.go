@@ -3,6 +3,7 @@ package models
 import "github.com/gin-gonic/gin"
 
 type IRequest interface {
+	GetContext() *gin.Context
 	AddNewFilter(key string, value interface{})
 	SetBody(body IBaseModel)
 	SetBaseRequest(req *Request)
@@ -27,6 +28,10 @@ type Request struct {
 	Models interface{}
 	// config tags from loading or not
 	Tags map[string]bool
+}
+
+func (request *Request) GetContext() *gin.Context {
+	return request.Context
 }
 
 func (request *Request) AddNewFilter(key string, value interface{}) {
