@@ -13,7 +13,7 @@ type Error struct {
 }
 
 const (
-	BadRequestError   = 404
+	BadRequestError   = 400
 	NotFoundError     = 404
 	UnauthorizedError = 401
 	ForbiddenError    = 403
@@ -59,6 +59,14 @@ func GetError(status int, err ...error) error {
 		Status:  status,
 		Message: msg,
 	}
+}
+
+func GetNotFoundError(messages ...string) error {
+	if messages == nil || len(messages) == 0 {
+		messages = []string{"Not found"}
+	}
+	errs := getErrors(messages...)
+	return GetError(NotFoundError, errs...)
 }
 
 func GetUnAuthorizedError(messages ...string) error {
