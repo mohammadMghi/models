@@ -13,6 +13,7 @@ type Error struct {
 }
 
 const (
+	HttpOK            = 200
 	BadRequestError   = 400
 	NotFoundError     = 404
 	UnauthorizedError = 401
