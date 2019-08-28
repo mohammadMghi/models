@@ -62,6 +62,22 @@ func GetError(status int, err ...error) error {
 	}
 }
 
+func GetErrorFromInterface(err ...interface{}) error {
+	var firstErr interface{}
+	if err != nil && len(err) > 0 {
+		firstErr = err[0]
+	}
+	if firstErr != nil {
+		if e, ok := firstErr.(*Error); ok {
+			return *e
+		}
+	}
+	return Error{
+		Status:  500,
+		Message: fmt.Sprintf("%v", firstErr),
+	}
+}
+
 func GetNotFoundError(messages ...string) error {
 	if messages == nil || len(messages) == 0 {
 		messages = []string{"Not found"}
