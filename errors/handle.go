@@ -1,37 +1,6 @@
-package models
+package errors
 
-import (
-	"errors"
-	"fmt"
-)
-
-type Error struct {
-	error
-
-	Status  int    `json:"-"`
-	Message string `json:"message,omitempty"`
-}
-
-const (
-	HttpOK            = 200
-	BadRequestError   = 400
-	NotFoundError     = 404
-	UnauthorizedError = 401
-	ForbiddenError    = 403
-	InternalError     = 500
-)
-
-func (e Error) Error() string {
-	return e.Message
-}
-
-func getErrors(messages ...string) []error {
-	errs := []error{}
-	for _, message := range messages {
-		errs = append(errs, errors.New(message))
-	}
-	return errs
-}
+import "fmt"
 
 func HandleError(err error) error {
 	return Error{
@@ -102,7 +71,7 @@ func GetForbiddenError(messages ...string) error {
 	return GetError(ForbiddenError, errs...)
 }
 
-// GetValidationError returns error associated with HTTP Vlidation error
+// GetValidationError returns error associated with HTTP Vlidation errors
 func GetValidationError(messages ...string) error {
 	if messages == nil || len(messages) == 0 {
 		messages = []string{"Your request is not valid"}
