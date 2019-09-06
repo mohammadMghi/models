@@ -34,10 +34,6 @@ func (request *Request) GetContext() *gin.Context {
 	return request.Context
 }
 
-func (request *Request) AddNewFilter(key string, value interface{}) {
-	(*request.Filters)[key] = value
-}
-
 func (request *Request) SetBaseRequest(req *Request) {
 	request.IRequest = req
 }
