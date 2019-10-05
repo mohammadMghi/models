@@ -1,4 +1,4 @@
-module github.com/kulichak/models
+module github.com/go-ginger/models
 
 go 1.12
 
