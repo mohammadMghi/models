@@ -8,6 +8,7 @@ type IBaseModel interface {
 	HandleCreateDefaultValues()
 	HandleUpdateDefaultValues()
 	HandleDeleteDefaultValues()
+	SetID(id interface{})
 }
 
 type BaseModel struct {
@@ -31,4 +32,7 @@ func (base *BaseModel) HandleUpdateDefaultValues() {
 func (base *BaseModel) HandleDeleteDefaultValues() {
 	now := time.Now().UTC()
 	base.DeletedAt = &now
+}
+
+func (base *BaseModel) SetID(id interface{}) {
 }
