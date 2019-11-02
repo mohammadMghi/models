@@ -24,8 +24,6 @@ type Request struct {
 	Body       IBaseModel
 	ExtraQuery map[string]interface{}
 
-	Model  IBaseModel
-	Models interface{}
 	// config tags from loading or not
 	Tags map[string]bool
 }
