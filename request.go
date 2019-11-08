@@ -24,7 +24,6 @@ type Request struct {
 	Body       IBaseModel
 	ExtraQuery map[string]interface{}
 
-	// config tags from loading or not
 	Tags map[string]bool
 }
 
@@ -33,7 +32,17 @@ func (request *Request) GetContext() *gin.Context {
 }
 
 func (request *Request) SetBaseRequest(req *Request) {
-	request.IRequest = req
+	request.Context = req.Context
+	request.Params = req.Params
+	request.ID = req.ID
+	request.Fields = req.Fields
+	request.Filters = req.Filters
+	request.Sort = req.Sort
+	request.Page = req.Page
+	request.PerPage = req.PerPage
+	request.Body = req.Body
+	request.ExtraQuery = req.ExtraQuery
+	request.Tags = req.Tags
 }
 
 func (request *Request) GetBaseRequest() *Request {
