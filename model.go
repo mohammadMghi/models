@@ -7,6 +7,7 @@ import (
 type IBaseModel interface {
 	HandleCreateDefaultValues()
 	HandleUpdateDefaultValues()
+	HandleUpsertDefaultValues()
 	HandleDeleteDefaultValues()
 	SetID(id interface{})
 }
@@ -26,6 +27,11 @@ func (base *BaseModel) HandleCreateDefaultValues() {
 }
 
 func (base *BaseModel) HandleUpdateDefaultValues() {
+	base.UpdatedAt = time.Now().UTC()
+}
+
+func (base *BaseModel) HandleUpsertDefaultValues() {
+	base.CreatedAt = time.Now().UTC()
 	base.UpdatedAt = time.Now().UTC()
 }
 
