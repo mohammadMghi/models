@@ -14,6 +14,7 @@ type Request struct {
 	IRequest
 
 	Context    *gin.Context
+	Auth       IAuthorization
 	Params     *gin.Params
 	ID         interface{}
 	Fields     *Fields
