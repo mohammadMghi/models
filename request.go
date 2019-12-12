@@ -4,10 +4,13 @@ import "github.com/gin-gonic/gin"
 
 type IRequest interface {
 	GetContext() *gin.Context
+	GetAuth() IAuthorization
 	AddNewFilter(key string, value interface{})
 	SetBody(body IBaseModel)
 	SetBaseRequest(req *Request)
 	GetBaseRequest() *Request
+	SetTemp(key string, value interface{})
+	GetTemp(key string) (value interface{})
 }
 
 type Request struct {
@@ -26,10 +29,16 @@ type Request struct {
 	ExtraQuery map[string]interface{}
 
 	Tags map[string]bool
+	// temporary data for further use
+	Temp map[string]interface{}
 }
 
 func (request *Request) GetContext() *gin.Context {
 	return request.Context
+}
+
+func (request *Request) GetAuth() IAuthorization {
+	return request.Auth
 }
 
 func (request *Request) SetBaseRequest(req *Request) {
@@ -52,4 +61,19 @@ func (request *Request) GetBaseRequest() *Request {
 
 func (request *Request) SetBody(body IBaseModel) {
 	request.Body = body
+}
+
+func (request *Request) SetTemp(key string, value interface{}) {
+	if request.Temp == nil {
+		request.Temp = map[string]interface{}{}
+	}
+	request.Temp[key] = value
+}
+
+func (request *Request) GetTemp(key string) (value interface{}) {
+	if request.Temp == nil {
+		return
+	}
+	value, _ = request.Temp[key]
+	return
 }
