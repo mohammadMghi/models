@@ -18,7 +18,7 @@ type Request struct {
 
 	Context    *gin.Context
 	Auth       IAuthorization
-	Params     *gin.Params
+	Params     *Params
 	ID         interface{}
 	Fields     *Fields
 	Filters    *Filters
