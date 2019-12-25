@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -9,6 +10,8 @@ type IBaseModel interface {
 	HandleUpdateDefaultValues()
 	HandleUpsertDefaultValues()
 	HandleDeleteDefaultValues()
+	GetID() interface{}
+	GetIDString() string
 	SetID(id interface{})
 }
 
@@ -38,6 +41,14 @@ func (base *BaseModel) HandleUpsertDefaultValues() {
 func (base *BaseModel) HandleDeleteDefaultValues() {
 	now := time.Now().UTC()
 	base.DeletedAt = &now
+}
+
+func (base *BaseModel) GetID() interface{} {
+	return base.ID
+}
+
+func (base *BaseModel) GetIDString() string {
+	return fmt.Sprintf("%v", base.ID)
 }
 
 func (base *BaseModel) SetID(id interface{}) {
