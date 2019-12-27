@@ -1,6 +1,9 @@
 package models
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
 
 type IRequest interface {
 	GetContext() *gin.Context
@@ -11,6 +14,8 @@ type IRequest interface {
 	GetBaseRequest() *Request
 	SetTemp(key string, value interface{})
 	GetTemp(key string) (value interface{})
+	GetID() interface{}
+	GetIDString() string
 }
 
 type Request struct {
@@ -76,4 +81,23 @@ func (request *Request) GetTemp(key string) (value interface{}) {
 	}
 	value, _ = request.Temp[key]
 	return
+}
+
+func (request *Request) GetID() interface{} {
+	id := request.ID
+	if id == nil && request.Body != nil {
+		id = request.Body.GetID()
+	}
+	return id
+}
+
+func (request *Request) GetIDString() string {
+	var id interface{}
+	if request.Body != nil {
+		id = request.Body.GetIDString()
+	}
+	if id == nil {
+		id = request.ID
+	}
+	return fmt.Sprintf("%v", id)
 }
