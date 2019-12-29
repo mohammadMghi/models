@@ -42,6 +42,13 @@ func (request *Request) GetContext() *gin.Context {
 	return request.Context
 }
 
+func (request *Request) AddNewFilter(key string, value interface{}) {
+	if request.Filters == nil {
+		request.Filters = &Filters{}
+	}
+	request.Filters.Add(key, value)
+}
+
 func (request *Request) GetAuth() IAuthorization {
 	return request.Auth
 }
