@@ -10,6 +10,7 @@ type IRequest interface {
 	GetAuth() IAuthorization
 	AddNewFilter(key string, value interface{})
 	SetBody(body IBaseModel)
+	GetBody() (body IBaseModel)
 	SetBaseRequest(req *Request)
 	GetBaseRequest() *Request
 	SetTemp(key string, value interface{})
@@ -73,6 +74,10 @@ func (request *Request) GetBaseRequest() *Request {
 
 func (request *Request) SetBody(body IBaseModel) {
 	request.Body = body
+}
+
+func (request *Request) GetBody() (body IBaseModel) {
+	return request.Body
 }
 
 func (request *Request) SetTemp(key string, value interface{}) {
