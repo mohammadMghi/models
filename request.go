@@ -9,6 +9,7 @@ type IRequest interface {
 	GetContext() *gin.Context
 	GetAuth() IAuthorization
 	AddNewFilter(key string, value interface{})
+	RemoveFilterByKey(key string)
 	SetBody(body IBaseModel)
 	GetBody() (body IBaseModel)
 	SetBaseRequest(req *Request)
@@ -48,6 +49,13 @@ func (request *Request) AddNewFilter(key string, value interface{}) {
 		request.Filters = &Filters{}
 	}
 	request.Filters.Add(key, value)
+}
+
+func (request *Request) RemoveFilterByKey(key string) {
+	if request.Filters == nil {
+		return
+	}
+	request.Filters.Delete(key)
 }
 
 func (request *Request) GetAuth() IAuthorization {
