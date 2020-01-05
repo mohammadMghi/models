@@ -116,7 +116,7 @@ func (request *Request) GetIDString() string {
 	if request.Body != nil {
 		id = request.Body.GetIDString()
 	}
-	if id == nil {
+	if id == nil || id == "" {
 		id = request.ID
 	}
 	return fmt.Sprintf("%v", id)
