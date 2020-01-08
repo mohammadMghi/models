@@ -13,6 +13,7 @@ type IBaseModel interface {
 	GetID() interface{}
 	GetIDString() string
 	SetID(id interface{})
+	Populate(request IRequest)
 }
 
 type BaseModel struct {
@@ -52,4 +53,7 @@ func (base *BaseModel) GetIDString() string {
 }
 
 func (base *BaseModel) SetID(id interface{}) {
+}
+
+func (base *BaseModel) Populate(request IRequest) {
 }

@@ -121,3 +121,13 @@ func (request *Request) GetIDString() string {
 	}
 	return fmt.Sprintf("%v", id)
 }
+
+func (request *Request) AddSort(name string, ascending ...bool) {
+	if request.Sort == nil {
+		request.Sort = &[]SortItem{}
+	}
+	*request.Sort = append(*request.Sort, SortItem{
+		Name:      name,
+		Ascending: len(ascending) > 0 && ascending[0],
+	})
+}
