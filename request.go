@@ -18,6 +18,9 @@ type IRequest interface {
 	GetTemp(key string) (value interface{})
 	GetID() interface{}
 	GetIDString() string
+	AddTag(key string, value bool)
+	GetTag(key string) (value *bool)
+	RemoveTag(key string)
 }
 
 type Request struct {
@@ -130,4 +133,28 @@ func (request *Request) AddSort(name string, ascending ...bool) {
 		Name:      name,
 		Ascending: len(ascending) > 0 && ascending[0],
 	})
+}
+
+func (request *Request) AddTag(key string, value bool) {
+	if request.Tags == nil {
+		request.Tags = map[string]bool{}
+	}
+	request.Tags[key] = value
+}
+
+func (request *Request) GetTag(key string) (value *bool) {
+	if request.Tags == nil {
+		return nil
+	}
+	if value, ok := request.Tags[key]; ok {
+		return &value
+	}
+	return nil
+}
+
+func (request *Request) RemoveTag(key string) {
+	if request.Tags == nil {
+		return
+	}
+	delete(request.Tags, key)
 }
