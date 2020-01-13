@@ -9,6 +9,7 @@ type IRequest interface {
 	GetContext() *gin.Context
 	GetAuth() IAuthorization
 	AddNewFilter(key string, value interface{})
+	GetFilter(key string) (value interface{})
 	RemoveFilterByKey(key string)
 	SetBody(body IBaseModel)
 	GetBody() (body IBaseModel)
@@ -16,11 +17,14 @@ type IRequest interface {
 	GetBaseRequest() *Request
 	SetTemp(key string, value interface{})
 	GetTemp(key string) (value interface{})
+	RemoveTemp(key string)
 	GetID() interface{}
 	GetIDString() string
-	AddTag(key string, value bool)
+	SetTag(key string, value bool)
 	GetTag(key string) (value *bool)
 	RemoveTag(key string)
+	AddExtraQuery(key string, value interface{})
+	RemoveExtraQueryByKey(key string, value interface{})
 }
 
 type Request struct {
@@ -52,6 +56,13 @@ func (request *Request) AddNewFilter(key string, value interface{}) {
 		request.Filters = &Filters{}
 	}
 	request.Filters.Add(key, value)
+}
+func (request *Request) GetFilter(key string) (value interface{}) {
+	if request.Filters == nil {
+		return
+	}
+	value, _ = (*request.Filters)[key]
+	return
 }
 
 func (request *Request) RemoveFilterByKey(key string) {
@@ -106,6 +117,13 @@ func (request *Request) GetTemp(key string) (value interface{}) {
 	return
 }
 
+func (request *Request) RemoveTemp(key string) {
+	if request.Temp == nil {
+		return
+	}
+	delete(request.Temp, key)
+}
+
 func (request *Request) GetID() interface{} {
 	id := request.ID
 	if id == nil && request.Body != nil {
@@ -135,7 +153,7 @@ func (request *Request) AddSort(name string, ascending ...bool) {
 	})
 }
 
-func (request *Request) AddTag(key string, value bool) {
+func (request *Request) SetTag(key string, value bool) {
 	if request.Tags == nil {
 		request.Tags = map[string]bool{}
 	}
@@ -157,4 +175,18 @@ func (request *Request) RemoveTag(key string) {
 		return
 	}
 	delete(request.Tags, key)
+}
+
+func (request *Request) AddExtraQuery(key string, value interface{}) {
+	if request.ExtraQuery == nil {
+		request.ExtraQuery = map[string]interface{}{}
+	}
+	request.ExtraQuery[key] = value
+}
+
+func (request *Request) RemoveExtraQueryByKey(key string, value interface{}) {
+	if request.ExtraQuery == nil {
+		return
+	}
+	delete(request.ExtraQuery, key)
 }
