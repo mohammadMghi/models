@@ -7,6 +7,7 @@ import (
 )
 
 type IRequest interface {
+	Populate(requestToPopulate IRequest) (populated IRequest)
 	GetContext() *gin.Context
 	GetAuth() IAuthorization
 	AddNewFilter(key string, value interface{})
@@ -53,6 +54,13 @@ type Request struct {
 	Tags map[string]bool
 	// temporary data for further use
 	Temp map[string]interface{}
+}
+
+func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest) {
+	req := requestToPopulate.GetBaseRequest()
+	req.CurrentLanguage = request.CurrentLanguage
+	populated = req
+	return
 }
 
 func (request *Request) GetContext() *gin.Context {

@@ -4,7 +4,7 @@ type IAuthorization interface {
 	Initialize(authorization IAuthorization)
 	GetBase() IAuthorization
 	Authenticated() bool
-	GetCurrentAccount() interface{}
-	GetCurrentAccountId() interface{}
+	GetCurrentAccount(request IRequest) interface{}
+	GetCurrentAccountId(request IRequest) interface{}
 	HasRole(roles ...string) bool
 }
