@@ -1,6 +1,10 @@
 package errors
 
-import "fmt"
+import (
+	"fmt"
+	gm "github.com/go-ginger/models"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+)
 
 func HandleError(err error) error {
 	return Error{
@@ -8,7 +12,7 @@ func HandleError(err error) error {
 	}
 }
 
-func GetError(status int, err ...error) error {
+func GetError(request gm.IRequest, status int, err ...error) error {
 	var msg string
 	if status == 0 {
 		status = 500
@@ -18,11 +22,29 @@ func GetError(status int, err ...error) error {
 	} else {
 		switch status {
 		case NotFoundError:
-			msg = "not found"
+			msg = request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "NotFoundError",
+					Other: "Requested information not found",
+				},
+			})
 		case UnauthorizedError:
-			msg = "not found"
+			msg = request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "UnauthorizedError",
+					Other: "You are not authorized to access this section",
+				},
+			})
 		default:
-			msg = fmt.Sprintf("invalid request, code %d", status)
+			msg = request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "InvalidRequestWithCode",
+					Other: "Invalid request, code {{.Code}}",
+				},
+				TemplateData: map[string]string{
+					"Code": string(status),
+				},
+			})
 		}
 	}
 	return Error{
@@ -47,43 +69,78 @@ func GetErrorFromInterface(err ...interface{}) error {
 	}
 }
 
-func GetNotFoundError(messages ...string) error {
+func GetNotFoundError(request gm.IRequest, messages ...string) error {
 	if messages == nil || len(messages) == 0 {
-		messages = []string{"Not found"}
+		messages = []string{
+			request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "NotFoundError",
+					Other: "requested information not found",
+				},
+			}),
+		}
 	}
 	errs := getErrors(messages...)
-	return GetError(NotFoundError, errs...)
+	return GetError(request, NotFoundError, errs...)
 }
 
-func GetUnAuthorizedError(messages ...string) error {
+func GetUnAuthorizedError(request gm.IRequest, messages ...string) error {
 	if messages == nil || len(messages) == 0 {
-		messages = []string{"You are not authorized to access this section"}
+		messages = []string{
+			request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "UnauthorizedError",
+					Other: "You are not authorized to access this section",
+				},
+			}),
+		}
 	}
 	errs := getErrors(messages...)
-	return GetError(UnauthorizedError, errs...)
+	return GetError(request, UnauthorizedError, errs...)
 }
 
-func GetForbiddenError(messages ...string) error {
+func GetForbiddenError(request gm.IRequest, messages ...string) error {
 	if messages == nil || len(messages) == 0 {
-		messages = []string{"Access to this section is denied"}
+		messages = []string{
+			request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "ForbiddenError",
+					Other: "Access to this section is denied",
+				},
+			}),
+		}
 	}
 	errs := getErrors(messages...)
-	return GetError(ForbiddenError, errs...)
+	return GetError(request, ForbiddenError, errs...)
 }
 
-// GetValidationError returns error associated with HTTP Vlidation errors
-func GetValidationError(messages ...string) error {
+// GetValidationError returns error associated with HTTP Validation errors
+func GetValidationError(request gm.IRequest, messages ...string) error {
 	if messages == nil || len(messages) == 0 {
-		messages = []string{"Your request is not valid"}
+		messages = []string{
+			request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "ValidationError",
+					Other: "Invalid request information",
+				},
+			}),
+		}
 	}
 	errs := getErrors(messages...)
-	return GetError(BadRequestError, errs...)
+	return GetError(request, BadRequestError, errs...)
 }
 
-func GetInternalServiceError(messages ...string) error {
+func GetInternalServiceError(request gm.IRequest, messages ...string) error {
 	if messages == nil || len(messages) == 0 {
-		messages = []string{"Unknown error"}
+		messages = []string{
+			request.MustLocalize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "UnknownError",
+					Other: "Unknown error",
+				},
+			}),
+		}
 	}
 	errs := getErrors(messages...)
-	return GetError(InternalError, errs...)
+	return GetError(request, InternalError, errs...)
 }
