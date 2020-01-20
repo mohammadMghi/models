@@ -10,6 +10,10 @@ type IRequest interface {
 	Populate(requestToPopulate IRequest) (populated IRequest)
 	GetContext() *gin.Context
 	GetAuth() IAuthorization
+	Authenticated() bool
+	GetCurrentAccount(request IRequest) interface{}
+	GetCurrentAccountId(request IRequest) interface{}
+	HasRole(roles ...string) bool
 	AddNewFilter(key string, value interface{})
 	GetFilter(key string) (value interface{})
 	RemoveFilterByKey(key string)
@@ -89,9 +93,33 @@ func (request *Request) RemoveFilterByKey(key string) {
 	request.Filters.Delete(key)
 }
 
+// auth
 func (request *Request) GetAuth() IAuthorization {
 	return request.Auth
 }
+
+func (request *Request) Authenticated() bool {
+	return request.Auth != nil && request.Auth.Authenticated()
+}
+
+func (request *Request) GetCurrentAccount(req IRequest) interface{} {
+	if request.Auth == nil {
+		return nil
+	}
+	return request.Auth.GetCurrentAccount(req)
+}
+
+func (request *Request) GetCurrentAccountId(req IRequest) interface{} {
+	if request.Auth == nil {
+		return nil
+	}
+	return request.Auth.GetCurrentAccountId(req)
+}
+
+func (request *Request) HasRole(roles ...string) bool {
+	return request.Auth != nil && request.Auth.HasRole(roles...)
+}
+//
 
 func (request *Request) SetBaseRequest(req *Request) {
 	request.Context = req.Context
