@@ -25,6 +25,7 @@ type IRequest interface {
 	GetTemp(key string) (value interface{})
 	RemoveTemp(key string)
 	GetID() interface{}
+	SetID(id interface{})
 	GetIDString() string
 	SetTag(key string, value bool)
 	GetTag(key string) (value *bool)
@@ -119,6 +120,7 @@ func (request *Request) GetCurrentAccountId(req IRequest) interface{} {
 func (request *Request) HasRole(roles ...string) bool {
 	return request.Auth != nil && request.Auth.HasRole(roles...)
 }
+
 //
 
 func (request *Request) SetBaseRequest(req *Request) {
@@ -176,6 +178,10 @@ func (request *Request) GetID() interface{} {
 		id = request.Body.GetID()
 	}
 	return id
+}
+
+func (request *Request) SetID(id interface{}) {
+	request.ID = id
 }
 
 func (request *Request) GetIDString() string {
