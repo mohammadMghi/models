@@ -4,11 +4,17 @@ import (
 	"errors"
 )
 
+type IError interface {
+	SetErrors(errors map[string]interface{})
+}
+
 type Error struct {
 	error
+	IError `json:"-"`
 
-	Status  int    `json:"-"`
-	Message string `json:"message,omitempty"`
+	Status  int                    `json:"-"`
+	Message string                 `json:"message,omitempty"`
+	Errors  map[string]interface{} `json:"errors,omitempty"`
 }
 
 const (
@@ -20,12 +26,16 @@ const (
 	InternalError     = 500
 )
 
-func (e Error) Error() string {
+func (e *Error) Error() string {
 	return e.Message
 }
 
+func (e *Error) SetErrors(errors map[string]interface{}) {
+	e.Errors = errors
+}
+
 func IsStatus(err error, status int) bool {
-	if e, ok := err.(Error); ok {
+	if e, ok := err.(*Error); ok {
 		return e.Status == status
 	}
 	return false

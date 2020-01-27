@@ -7,7 +7,7 @@ import (
 )
 
 func HandleError(err error) error {
-	return Error{
+	return &Error{
 		Message: err.Error(),
 	}
 }
@@ -47,7 +47,7 @@ func GetError(request gm.IRequest, status int, err ...error) error {
 			})
 		}
 	}
-	return Error{
+	return &Error{
 		Status:  status,
 		Message: msg,
 	}
@@ -60,10 +60,10 @@ func GetErrorFromInterface(err ...interface{}) error {
 	}
 	if firstErr != nil {
 		if e, ok := firstErr.(*Error); ok {
-			return *e
+			return e
 		}
 	}
-	return Error{
+	return &Error{
 		Status:  500,
 		Message: fmt.Sprintf("%v", firstErr),
 	}
