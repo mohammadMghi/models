@@ -5,16 +5,23 @@ import (
 )
 
 type IError interface {
-	SetErrors(errors map[string]interface{})
+	SetErrors(errors map[string]*ErrorItem)
+}
+
+type ErrorItem struct {
+	Key     string                `json:"key,omitempty"`
+	Title   string                `json:"title,omitempty"`
+	Message string                `json:"message,omitempty"`
+	Errors  map[string]*ErrorItem `json:"errors,omitempty"`
 }
 
 type Error struct {
 	error
 	IError `json:"-"`
 
-	Status  int                    `json:"-"`
-	Message string                 `json:"message,omitempty"`
-	Errors  map[string]interface{} `json:"errors,omitempty"`
+	Status  int                   `json:"-"`
+	Message string                `json:"message,omitempty"`
+	Errors  map[string]*ErrorItem `json:"errors,omitempty"`
 }
 
 const (
@@ -30,7 +37,7 @@ func (e *Error) Error() string {
 	return e.Message
 }
 
-func (e *Error) SetErrors(errors map[string]interface{}) {
+func (e *Error) SetErrors(errors map[string]*ErrorItem) {
 	e.Errors = errors
 }
 
