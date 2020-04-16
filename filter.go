@@ -11,6 +11,9 @@ func (f *Filters) Delete(key string) {
 }
 
 func (f *Filters) Extend(filters *Filters) {
+	if filters == nil {
+		return
+	}
 	for key, value := range *filters {
 		f.Add(key, value)
 	}

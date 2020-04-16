@@ -63,7 +63,30 @@ type Request struct {
 
 func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest) {
 	req := requestToPopulate.GetBaseRequest()
-	req.CurrentLanguage = request.CurrentLanguage
+	if req.CurrentLanguage == nil {
+		req.CurrentLanguage = request.CurrentLanguage
+	}
+	if req.Temp == nil {
+		req.Temp = request.Temp
+	} else {
+		req0 := request.GetBaseRequest()
+		if req0.Temp != nil {
+			for k, v := range req0.Temp {
+				if _, ok := req.Temp[k]; !ok {
+					req.SetTemp(k, v)
+				}
+			}
+		}
+	}
+	if req.Tags == nil {
+		req.Tags = request.Tags
+	}
+	if req.Page == 0 {
+		req.Page = request.Page
+	}
+	if req.PerPage == 0 {
+		req.PerPage = request.PerPage
+	}
 	populated = req
 	return
 }
