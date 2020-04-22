@@ -167,6 +167,7 @@ func (request *Request) GetBaseRequest() *Request {
 
 func (request *Request) SetBody(body IBaseModel) {
 	request.Body = body
+	request.SetTemp("body", body)
 }
 
 func (request *Request) GetBody() (body IBaseModel) {
