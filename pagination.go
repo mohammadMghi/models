@@ -11,7 +11,7 @@ type PaginationInfo struct {
 }
 
 type PaginateResult struct {
-	ReflectItems reflect.Value  `json:"-"`
+	ReflectItems *reflect.Value `json:"-"`
 	Items        interface{}    `json:"items,omitempty"`
 	Pagination   PaginationInfo `json:"pagination,omitempty"`
 }

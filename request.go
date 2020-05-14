@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"sync"
 )
 
 type IRequest interface {
@@ -33,6 +34,10 @@ type IRequest interface {
 	AddExtraQuery(key string, value interface{})
 	RemoveExtraQueryByKey(key string, value interface{})
 	MustLocalize(lc *i18n.LocalizeConfig) string
+	Lock()
+	Unlock()
+	RLock()
+	RUnlock()
 }
 
 type Language struct {
@@ -43,6 +48,7 @@ type Language struct {
 type Request struct {
 	IRequest
 
+	Mutex           *sync.RWMutex
 	Context         *gin.Context
 	Auth            IAuthorization
 	Params          *Params
@@ -78,6 +84,7 @@ func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest
 			}
 		}
 	}
+	req.Mutex = request.Mutex
 	if req.Tags == nil {
 		req.Tags = request.Tags
 	}
@@ -89,6 +96,28 @@ func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest
 	}
 	populated = req
 	return
+}
+
+func (request *Request) Lock() {
+	if request.Mutex == nil {
+		request.Mutex = &sync.RWMutex{}
+	}
+	request.Mutex.Lock()
+}
+
+func (request *Request) Unlock() {
+	request.Mutex.Unlock()
+}
+
+func (request *Request) RLock() {
+	if request.Mutex == nil {
+		request.Mutex = &sync.RWMutex{}
+	}
+	request.Mutex.RLock()
+}
+
+func (request *Request) RUnlock() {
+	request.Mutex.RUnlock()
 }
 
 func (request *Request) GetContext() *gin.Context {
@@ -178,14 +207,18 @@ func (request *Request) SetTemp(key string, value interface{}) {
 	if request.Temp == nil {
 		request.Temp = map[string]interface{}{}
 	}
+	request.Lock()
 	request.Temp[key] = value
+	request.Unlock()
 }
 
 func (request *Request) GetTemp(key string) (value interface{}) {
 	if request.Temp == nil {
 		return
 	}
+	request.RLock()
 	value, _ = request.Temp[key]
+	request.RUnlock()
 	return
 }
 
@@ -193,7 +226,9 @@ func (request *Request) RemoveTemp(key string) {
 	if request.Temp == nil {
 		return
 	}
+	request.Lock()
 	delete(request.Temp, key)
+	request.Unlock()
 }
 
 func (request *Request) GetID() interface{} {
