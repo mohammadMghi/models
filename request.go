@@ -308,5 +308,8 @@ func (request *Request) Language() string {
 
 func (request *Request) MustLocalize(lc *i18n.LocalizeConfig) string {
 	req := request.GetBaseRequest()
-	return req.CurrentLanguage.Localizer.MustLocalize(lc)
+	if req.CurrentLanguage != nil {
+		return req.CurrentLanguage.Localizer.MustLocalize(lc)
+	}
+	return DefaultLanguage.Localizer.MustLocalize(lc)
 }

@@ -19,10 +19,10 @@ type IBaseModel interface {
 type BaseModel struct {
 	IBaseModel `json:"-"`
 
-	ID        uint64     `json:"id,omitempty"`
-	CreatedAt time.Time  `json:"created_at,omitempty"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-	DeletedAt *time.Time `json:"deleted_at,omitempty"`
+	ID        uint64     `json:"id,omitempty" dl:"read_only"`
+	CreatedAt time.Time  `json:"created_at,omitempty" dl:"read_only"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty" dl:"read_only"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty" dl:"read_only"`
 }
 
 func (base *BaseModel) HandleCreateDefaultValues() {
