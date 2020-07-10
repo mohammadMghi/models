@@ -265,16 +265,20 @@ func (request *Request) AddSort(name string, ascending ...bool) {
 }
 
 func (request *Request) SetTag(key string, value bool) {
+	request.Lock()
 	if request.Tags == nil {
 		request.Tags = map[string]bool{}
 	}
 	request.Tags[key] = value
+	request.Unlock()
 }
 
 func (request *Request) GetTag(key string) (value *bool) {
 	if request.Tags == nil {
 		return nil
 	}
+	request.RLock()
+	defer request.RUnlock()
 	if value, ok := request.Tags[key]; ok {
 		return &value
 	}
@@ -285,21 +289,27 @@ func (request *Request) RemoveTag(key string) {
 	if request.Tags == nil {
 		return
 	}
+	request.Lock()
 	delete(request.Tags, key)
+	request.Unlock()
 }
 
 func (request *Request) AddExtraQuery(key string, value interface{}) {
+	request.Lock()
 	if request.ExtraQuery == nil {
 		request.ExtraQuery = map[string]interface{}{}
 	}
 	request.ExtraQuery[key] = value
+	request.Unlock()
 }
 
 func (request *Request) RemoveExtraQueryByKey(key string, value interface{}) {
 	if request.ExtraQuery == nil {
 		return
 	}
+	request.Lock()
 	delete(request.ExtraQuery, key)
+	request.Unlock()
 }
 
 func (request *Request) Language() string {
