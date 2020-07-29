@@ -69,6 +69,9 @@ type Request struct {
 
 func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest) {
 	req := requestToPopulate.GetBaseRequest()
+	if req.Context == nil {
+		req.Context = request.Context
+	}
 	if req.CurrentLanguage == nil {
 		req.CurrentLanguage = request.CurrentLanguage
 	}
