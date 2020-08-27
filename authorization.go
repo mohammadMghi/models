@@ -1,7 +1,7 @@
 package models
 
 type IAuthorization interface {
-	Initialize(authorization IAuthorization)
+	Initialize(request IRequest, authorization IAuthorization)
 	GetBase() IAuthorization
 	Authenticated() bool
 	GetCurrentAccount(request IRequest) interface{}
