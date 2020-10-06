@@ -68,6 +68,7 @@ type Request struct {
 }
 
 func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest) {
+	populated = requestToPopulate
 	req := requestToPopulate.GetBaseRequest()
 	if req.Context == nil {
 		req.Context = request.Context
@@ -97,7 +98,6 @@ func (request *Request) Populate(requestToPopulate IRequest) (populated IRequest
 	if req.PerPage == 0 {
 		req.PerPage = request.PerPage
 	}
-	populated = req
 	return
 }
 
