@@ -7,6 +7,9 @@ import (
 )
 
 func HandleError(err error) error {
+	if err == nil {
+		return nil
+	}
 	return &Error{
 		Message: err.Error(),
 	}
