@@ -2,8 +2,10 @@ package models
 
 import (
 	"fmt"
+	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 	"sync"
 )
 
@@ -329,7 +331,8 @@ func (request *Request) MustLocalize(lc *i18n.LocalizeConfig) string {
 }
 
 func (request *Request) SetLanguage(lang string, messagesPath string) *Request {
-	var LanguageBundle *i18n.Bundle
+	var LanguageBundle = i18n.NewBundle(language.English)
+	LanguageBundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	LanguageBundle.LoadMessageFile(messagesPath)
 	request.CurrentLanguage = &Language{
 		AcceptLanguage: lang,
