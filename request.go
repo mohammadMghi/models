@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 	"sync"
 )
 
@@ -38,6 +39,7 @@ type IRequest interface {
 	Unlock()
 	RLock()
 	RUnlock()
+	SetLanguage(language string)
 }
 
 type Language struct {
@@ -325,4 +327,12 @@ func (request *Request) MustLocalize(lc *i18n.LocalizeConfig) string {
 		return req.CurrentLanguage.Localizer.MustLocalize(lc)
 	}
 	return DefaultLanguage.Localizer.MustLocalize(lc)
+}
+
+func (request *Request) SetLanguage(lang string) *Request {
+	request.CurrentLanguage = &Language{
+		AcceptLanguage: lang,
+		Localizer:      i18n.NewLocalizer(i18n.NewBundle(language.English), lang),
+	}
+	return request
 }
