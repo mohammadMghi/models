@@ -39,7 +39,7 @@ type IRequest interface {
 	Unlock()
 	RLock()
 	RUnlock()
-	SetLanguage(language string)
+	SetLanguage(lang string) *Request
 }
 
 type Language struct {
