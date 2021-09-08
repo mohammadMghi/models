@@ -8,6 +8,7 @@ type PaginationInfo struct {
 	Page       uint64 `json:"page,omitempty"`
 	PerPage    uint64 `json:"per_page,omitempty"`
 	HasNext    bool   `json:"has_next,omitempty"`
+	More      interface{}    `json:"more,omitempty"`
 }
 
 type PaginateResult struct {
