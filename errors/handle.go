@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	gm "github.com/go-ginger/models"
+	gm "github.com/mohammadMghi/models"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 

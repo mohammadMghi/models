@@ -1,4 +1,4 @@
-module github.com/go-ginger/models
+module github.com/mohammadMghi/models
 
 go 1.12
 
